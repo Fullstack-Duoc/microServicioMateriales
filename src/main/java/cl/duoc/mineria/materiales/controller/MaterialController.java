@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.duoc.mineria.materiales.dto.MaterialRequestDTO;
@@ -54,8 +56,20 @@ public class MaterialController {
     // Eliminar un material
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarMaterial(@PathVariable Long id){
-        materialService.eliminarMaterial((id));
+        materialService.eliminarMaterial(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // Actualización parcial de la densidad (PATCH)
+    @PatchMapping("/{id}/densidad")
+    public ResponseEntity<MaterialResponseDTO> actualizarDensidad(@PathVariable Long id, @RequestParam double valor) {
+        return ResponseEntity.ok(materialService.actualizarDensidad(id, valor));
+    }
+
+    // Buscar por clasificación (GET)
+    @GetMapping("/buscar")
+    public ResponseEntity<List<MaterialResponseDTO>> buscarPorClasificacion(@RequestParam String clasificacion) {
+        return ResponseEntity.ok(materialService.listarPorClasificacion(clasificacion));
     }
 
 }
